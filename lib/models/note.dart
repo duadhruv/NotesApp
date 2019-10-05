@@ -36,4 +36,29 @@ set id(int value) {
   _id = value;
 }
 
+Map<String,dynamic> toMap()
+{
+  var map=Map<String,dynamic >();
+  if(_id !=null)
+    {
+      map['id']=_id;
+    }
+  map['title']=_title;
+  map['description']=_description;
+  map['priority']=_priority;
+  map['date']=_date;
+  return map;
+
+
+}
+
+Note.fromMapObject(Map<String , dynamic>map)
+{
+  this._id=map['id'];
+  this._date=map['date'];
+  this._priority=map['priority'];
+  this._description=map['description'];
+  this._title=map['title'];
+}
+
 }
