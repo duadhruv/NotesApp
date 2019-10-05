@@ -19,7 +19,7 @@ class NoteDetailsState extends State<NoteDetails> {
       appBar: AppBar(
         title: Text("Edit Note"),
       ),
-      
+
       body: Padding(
         padding: EdgeInsets.only(top: 15, left: 10, right: 10),
         child: ListView(
