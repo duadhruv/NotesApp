@@ -29,6 +29,12 @@ class NoteListState extends State<NoteList> {
 
   @override
   Widget build(BuildContext context) {
+    if(noteList==null)
+      {
+        noteList=List <Note>() ;
+        updateListView();
+      }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Notes"),
@@ -36,7 +42,7 @@ class NoteListState extends State<NoteList> {
       body: getNotesListView(),
       floatingActionButton: FloatingActionButton(onPressed:() {
         debugPrint("Add Tapped");
-        navigateToDetails("Add Note");
+        navigateToDetails(Note('','',2),"Add Note");
       },
         tooltip: 'Add Note',
         child: Icon(Icons.add),
@@ -55,7 +61,7 @@ class NoteListState extends State<NoteList> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: getprioritycolor(this.noteList[position].priority),
-              child: GestureDetector(child: Icon(Icons.keyboard_arrow_right) ,
+              child: GestureDetector(child: getpriorityicons(this.noteList[position].priority) ,
                 onTap: (){
                 _delete(context, noteList[position]);
                 },
@@ -71,7 +77,7 @@ class NoteListState extends State<NoteList> {
             onTap: ()
             {
               debugPrint("List Tapped");
-              navigateToDetails("Edit Note");
+              navigateToDetails(noteList[position],"Edit Note");
             },
           ),
         );
@@ -86,8 +92,10 @@ class NoteListState extends State<NoteList> {
     {
       case 1:
         return Icon(Icons.play_arrow);
+        break;
       case 2:
         return Icon(Icons.keyboard_arrow_right);
+        break;
       default:
         return Icon(Icons.keyboard_arrow_right);
     }
@@ -115,6 +123,7 @@ class NoteListState extends State<NoteList> {
     if(result!=0)
       {
         _showsnackbar(context,"Note Deleted Successfully");
+        updateListView();
       }
   }
 
@@ -125,10 +134,32 @@ class NoteListState extends State<NoteList> {
 
 
   }
-  void navigateToDetails(String title)
+  void navigateToDetails(Note note , String title) async
   {
-    Navigator.push(context, MaterialPageRoute(builder: (context){
-      return NoteDetails(title);
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context){
+      return NoteDetails(note , title);
     }));
+
+    if(result == true)
+      {
+        updateListView();
+      }
+  }
+
+  void updateListView()
+  {
+    final Future<Database> dbfuture = databaseHelper.initializeDatabase();
+    dbfuture.then((database)
+    {
+      Future<List<Note>> notelistfuture = databaseHelper.getnotelist();
+      notelistfuture.then((noteList)
+          {
+            setState(() {
+              this.noteList = noteList;
+              this.count = noteList.length;
+            });
+          }
+      );
+    });
   }
 }

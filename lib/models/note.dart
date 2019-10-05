@@ -3,7 +3,7 @@ class Note
 int _id,_priority;
 String _title,_description,_date;
 
-Note(this._id, this._priority, this._title, this._date,[this._description]);
+Note(this._title, this._date, this._priority, [this._description]);
 Note.withid(this._priority, this._title, this._date,[this._description]);
 
 get date => _date;

@@ -43,7 +43,7 @@ class DatabaseHelper
   }
 
   void _createDb(Database db,int newVersion) async{
-    await db.execute('CREATE TABLE $noteTable( $colID INTEGER PRIMARY KET AUTOINCREMENT , $colTitle TEXT ,$colDescription TEXT,$colPriority INTEGER,$colDate TEXT)');
+    await db.execute('CREATE TABLE $noteTable( $colID INTEGER PRIMARY KEY AUTOINCREMENT , $colTitle TEXT ,$colDescription TEXT,$colPriority INTEGER,$colDate TEXT)');
 
   }
 
@@ -87,6 +87,18 @@ class DatabaseHelper
 
   }
 
+
+  Future<List<Note>> getnotelist () async
+  {
+    var notemaplist= await _databaseHelper.getNoteMapList();
+    int count = notemaplist.length;
+    List<Note> notelist = List<Note>();
+    for(int i = 0 ;i<count;i++)
+      {
+        notelist.add(Note.fromMapObject(notemaplist[i]));
+      }
+      return notelist;
+  }
 
 
 }
