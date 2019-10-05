@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+
+import 'package:sqflite/sqflite.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:note_app/models/note.dart';
+
 class NoteDetails extends StatefulWidget {
   String title;
   NoteDetails(this.title);
